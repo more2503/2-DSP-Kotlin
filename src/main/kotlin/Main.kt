@@ -1,7 +1,5 @@
 package org.example
 
-import java.util.*
-
 fun main() {
     println("Hello World!")
 
@@ -98,7 +96,7 @@ fun main() {
 //============================================
 
 
-// Crossing Set
+// Calculate Crossing Set
 
     var crossingsSet: CrossingSet = CrossingSet(listOf(1, 2, 3))
     var permutations: MutableList<List<Int>> = crossingsSet.permutations.toMutableList()
@@ -111,6 +109,9 @@ fun main() {
     permutations.add(listOf(2))
     permutations.add(listOf(3))
 
+
+    crossingsSet.permutations = permutations
+
     val result: MutableList<Intersection_PartialcrossingSet> = mutableListOf()
 
     for (perm in permutations) {
@@ -118,10 +119,53 @@ fun main() {
         val intersection_PartialcrossingSet = getIntersections(vertices, perm, guessedPaths.toList())
         result.add(intersection_PartialcrossingSet)
         crossingsSet.marbles.addAll(intersection_PartialcrossingSet.partialCrossingSet.marbles)
+        if (intersection_PartialcrossingSet.intersection.alpha != null && intersection_PartialcrossingSet.intersection.omega != null)
+            crossingsSet.ends.add(Pair(intersection_PartialcrossingSet.intersection.alpha, intersection_PartialcrossingSet.intersection.omega))
+        else
+            crossingsSet.ends.add(Pair(null, null))
     }
 
+    val T: List<MutableList<Vertex>> = listOf(mutableListOf(), mutableListOf(), mutableListOf())
 
-    println(permutations)
+    for (path in guessedPaths) {
+        for (v in path.vertices) {
+            if (crossingsSet.marbles.contains(v))
+                T[path.id - 1].add(v)
+        }
+    }
+
+// ll 3
+    var P: MutableList<MutableList<Pair<Vertex, Vertex>>> = mutableListOf(
+        mutableListOf(),
+        mutableListOf(),
+        mutableListOf()
+    )
+
+// ll 5
+    var minimalSegments: List<List<Vertex>> = calculateMinimalSegments(crossingsSet, guessedPaths.toList())
+
+    for (S in minimalSegments) {
+        var marks: MutableSet<Int> = mutableSetOf()
+        val label: Int = S.first().memberOfPath - 1
+
+        for (i in 0..<crossingsSet.permutations.size) {
+            val permutation = crossingsSet.permutations[i]
+            val ends = crossingsSet.ends[i]
+
+            if (ends.first != null && ends.second != null) {
+                if (ends.first!!.dist[label] <= S.first().dist[label] && S.first().dist[label] < S.last().dist[label] && S.last().dist[label] <= ends.second!!.dist[label]) {
+                    permutation.forEach { marks.add(it) }
+                }
+            }
+        }
+
+        val j = marks.min()
+        val x = S.minBy { it.dist[j - 1] }
+        val y = S.maxBy { it.dist[j - 1] }
+
+        P[j - 1].add(Pair(x, y))
+    }
+
 
 //============================================
 

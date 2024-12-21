@@ -2,8 +2,9 @@ package org.example
 
 class CrossingSet(var labels: List<Int>) {
 
-    val permutations: List<List<Int>> = permutations(labels)
+    var permutations: List<List<Int>> = permutations(labels)
     val marbles: MutableSet<Vertex> = mutableSetOf()
+    val ends: MutableList<Pair<Vertex?, Vertex?>> = mutableListOf()
 
     override fun toString(): String {
         var out = ""
@@ -97,8 +98,8 @@ fun getIntersections(vertices: List<Vertex>, permutation: List<Int>, paths: List
         else {
             inducedSubpathBySigmaStart = getPathInducedByEndpoints(
                 paths[permutation[permutation.size - 2] - 1],
-                T_sigma_start.alpha!!,
-                T_sigma_start.omega!!
+                T_sigma_start.alpha,
+                T_sigma_start.omega
             )
             inducedSubpathBySigmaLastTwo = getPathInducedByEndpoints(
                 paths[permutation[permutation.size - 2] - 1],

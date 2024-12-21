@@ -99,3 +99,25 @@ fun Any?.notNull(f: ()-> Unit){
         f()
     }
 }
+
+fun calculateMinimalSegments(crossingSet: CrossingSet, paths: List<Path>): List<List<Vertex>> {
+
+    val marblesOfPath_i: MutableList<List<Vertex>> = mutableListOf()
+    val result: MutableList<List<Vertex>> = mutableListOf()
+
+    marblesOfPath_i.add(crossingSet.marbles.filter { v -> v.memberOfPath == 1 })
+    marblesOfPath_i.add(crossingSet.marbles.filter { v -> v.memberOfPath == 2 })
+    marblesOfPath_i.add(crossingSet.marbles.filter { v -> v.memberOfPath == 3 })
+
+    marblesOfPath_i.forEachIndexed { idx, path ->
+        val tmp = path.sortedBy { it.dist[it.memberOfPath - 1] }
+        marblesOfPath_i[idx] = tmp
+    }
+
+    for (path in marblesOfPath_i) {
+        for (i in 0..path.size - 2)
+            result.add(getPathInducedByEndpoints(paths[path.first().memberOfPath - 1], path[i], path[i+1]))
+    }
+
+    return result
+}
