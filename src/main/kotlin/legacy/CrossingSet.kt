@@ -1,4 +1,4 @@
-package org.example
+package org.example.legacy
 
 class CrossingSet(var labels: List<Int>) {
 

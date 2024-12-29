@@ -1,4 +1,4 @@
-package org.example
+package org.example.legacy
 
 import java.util.*
 
@@ -30,7 +30,7 @@ fun createPathFromVertices(vertices: List<Vertex>, path: List<String>): List<Edg
     return edges
 }
 
-fun getVertex(vertices: List<Vertex>,label: String): Vertex {
+fun getVertex(vertices: List<Vertex>, label: String): Vertex {
     try {
         return vertices.find { v -> v.label == label }!!
     } catch (e: Exception) {
@@ -85,11 +85,11 @@ fun permutations(input: List<Int>): List<List<Int>> {
 }
 
 
-fun permutationsRecursive(input: List<Int>, index: Int, answers: MutableList<List<Int>>) {
-    if (index == input.lastIndex) answers.add(input.toList())
+fun permutationsRecursive(input: List<Int>, index: Int, output: MutableList<List<Int>>) {
+    if (index == input.lastIndex) output.add(input.toList())
     for (i in index .. input.lastIndex) {
         Collections.swap(input, index, i)
-        permutationsRecursive(input, index + 1, answers)
+        permutationsRecursive(input, index + 1, output)
         Collections.swap(input, i, index)
     }
 }

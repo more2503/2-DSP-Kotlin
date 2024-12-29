@@ -1,4 +1,4 @@
-package org.example
+package org.example.legacy
 
 class Vertex(var label: String = "", val memberOfPath: Int = -1) {
     var dist: IntArray = IntArray(3)
