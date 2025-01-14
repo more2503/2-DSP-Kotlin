@@ -80,9 +80,52 @@ class Graph(val vertices: List<Vertex>, val edges: List<Edge>, val vertexPairs: 
         subsets.forEach { subset ->
             permutation[subset] = getAllPermutation(subset)
         }
+
     }
 
-    fun guessCrossingSets(): List<CrossingSet> {
+    fun guessCrossingSetsGivenPermutation(permutation: List<Int>): List<CrossingSet> {
+        var crossingSets = mutableListOf<CrossingSet>()
 
+        // suggestion: take the union of all vertices that are part of shortest paths
+        this.shortestPaths.forEach { start, paths ->
+            paths.forEach { path ->
+                val s = path.first()
+                val t = path.last()
+
+                // delta exists
+                for ( i1 in 1..<path.size-1 ) {
+                    val delta = path[i1]
+
+                    crossingSets.add(CrossingSet(this, permutation, mapOf(
+                        MarbleType.START to s,
+                        MarbleType.DELTA to delta,
+                        MarbleType.END to t
+                    )))
+                }
+
+                // non-crossing
+                for ( i1 in 1..<path.size-2 ) {
+                    for ( i2 in i1+1..<path.size-1 ) {
+                        val rho = path[i1]
+                        val _omega = path[i2]
+
+                        crossingSets.add(CrossingSet(this, permutation,
+                            mapOf(
+                                MarbleType.START to s,
+                                MarbleType.RHO to rho,
+                                MarbleType._OMEGA to _omega,
+                                MarbleType.END to t
+                            )
+                        ))
+                    }
+                }
+
+
+                // crossing
+            }
+        }
+
+        println(crossingSets)
+        return crossingSets
     }
 }

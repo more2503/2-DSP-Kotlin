@@ -67,3 +67,14 @@ fun getAllSubsets(input: List<Int>): List<List<Int>> {
 
     return result
 }
+
+fun checkIfCrossingsetIsValid(crossingset: CrossingSet): Boolean {
+
+    var marbles = crossingset.marbles
+
+    if (marbles.delta != null) {
+        if (marbles.rho != null || marbles.alpha != null || marbles.omega != null || marbles._omega != null)
+            return false
+    }
+    
+}

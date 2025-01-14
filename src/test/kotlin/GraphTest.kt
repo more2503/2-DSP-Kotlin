@@ -52,6 +52,7 @@ class GraphTest {
         }
 
         val shortestPaths = ShortestPaths(G)
+        G.guessCrossingSetsGivenPermutation(G.permutation[listOf(0,1,2)]!![0])
 
 
         assertContentEquals(edges, G.edges)
